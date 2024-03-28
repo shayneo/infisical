@@ -16,6 +16,7 @@ import { registerProjectRouter } from "./project-router";
 import { registerSecretFolderRouter } from "./secret-folder-router";
 import { registerSecretImportRouter } from "./secret-import-router";
 import { registerSecretTagRouter } from "./secret-tag-router";
+import { registerSharedSecretRouter } from "./shared-secret-router";
 import { registerSsoRouter } from "./sso-router";
 import { registerUserActionRouter } from "./user-action-router";
 import { registerUserRouter } from "./user-router";
@@ -39,6 +40,7 @@ export const registerV1Routes = async (server: FastifyZodProvider) => {
   await server.register(registerUserActionRouter, { prefix: "/user-action" });
   await server.register(registerSecretImportRouter, { prefix: "/secret-imports" });
   await server.register(registerSecretFolderRouter, { prefix: "/folders" });
+  await server.register(registerSharedSecretRouter, { prefix: "/shared-secrets" });
 
   await server.register(
     async (projectRouter) => {

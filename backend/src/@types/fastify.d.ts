@@ -43,6 +43,7 @@ import { TSecretFolderServiceFactory } from "@app/services/secret-folder/secret-
 import { TSecretImportServiceFactory } from "@app/services/secret-import/secret-import-service";
 import { TSecretTagServiceFactory } from "@app/services/secret-tag/secret-tag-service";
 import { TServiceTokenServiceFactory } from "@app/services/service-token/service-token-service";
+import { TSharedSecretServiceFactory } from "@app/services/shared-secret/shared-secret-service";
 import { TSuperAdminServiceFactory } from "@app/services/super-admin/super-admin-service";
 import { TTelemetryServiceFactory } from "@app/services/telemetry/telemetry-service";
 import { TUserDALFactory } from "@app/services/user/user-dal";
@@ -95,6 +96,7 @@ declare module "fastify" {
       projectRole: TProjectRoleServiceFactory;
       secret: TSecretServiceFactory;
       secretTag: TSecretTagServiceFactory;
+      sharedSecret: TSharedSecretServiceFactory;
       secretImport: TSecretImportServiceFactory;
       projectBot: TProjectBotServiceFactory;
       folder: TSecretFolderServiceFactory;

@@ -167,6 +167,9 @@ import {
   TServiceTokens,
   TServiceTokensInsert,
   TServiceTokensUpdate,
+  TSharedSecrets,
+  TSharedSecretsInsert,
+  TSharedSecretsUpdate,
   TSuperAdmin,
   TSuperAdminInsert,
   TSuperAdminUpdate,
@@ -335,6 +338,7 @@ declare module "knex/types/tables" {
       TSecretRotationOutputsInsert,
       TSecretRotationOutputsUpdate
     >;
+    [TableName.SharedSecrets]: Knex.CompositeTableType<TSharedSecrets, TSharedSecretsInsert, TSharedSecretsUpdate>;
     [TableName.Snapshot]: Knex.CompositeTableType<TSecretSnapshots, TSecretSnapshotsInsert, TSecretSnapshotsUpdate>;
     [TableName.SnapshotSecret]: Knex.CompositeTableType<
       TSecretSnapshotSecrets,

@@ -104,6 +104,8 @@ import { secretTagDALFactory } from "@app/services/secret-tag/secret-tag-dal";
 import { secretTagServiceFactory } from "@app/services/secret-tag/secret-tag-service";
 import { serviceTokenDALFactory } from "@app/services/service-token/service-token-dal";
 import { serviceTokenServiceFactory } from "@app/services/service-token/service-token-service";
+import { sharedSecretDALFactory } from "@app/services/shared-secret/shared-secret-dal";
+import { sharedSecretServiceFactory } from "@app/services/shared-secret/shared-secret-service";
 import { TSmtpService } from "@app/services/smtp/smtp-service";
 import { superAdminDALFactory } from "@app/services/super-admin/super-admin-dal";
 import { getServerCfg, superAdminServiceFactory } from "@app/services/super-admin/super-admin-service";
@@ -163,6 +165,7 @@ export const registerRoutes = async (
   const secretVersionDAL = secretVersionDALFactory(db);
   const secretVersionTagDAL = secretVersionTagDALFactory(db);
   const secretBlindIndexDAL = secretBlindIndexDALFactory(db);
+  const sharedSecretDAL = sharedSecretDALFactory(db);
 
   const integrationDAL = integrationDALFactory(db);
   const integrationAuthDAL = integrationAuthDALFactory(db);
@@ -420,6 +423,7 @@ export const registerRoutes = async (
   });
 
   const secretTagService = secretTagServiceFactory({ secretTagDAL, permissionService });
+  const sharedSecretService = sharedSecretServiceFactory({ sharedSecretDAL });
   const folderService = secretFolderServiceFactory({
     permissionService,
     folderDAL,
@@ -629,6 +633,7 @@ export const registerRoutes = async (
     secretRotation: secretRotationService,
     dynamicSecret: dynamicSecretService,
     dynamicSecretLease: dynamicSecretLeaseService,
+    sharedSecret: sharedSecretService,
     snapshot: snapshotService,
     saml: samlService,
     ldap: ldapService,

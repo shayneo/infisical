@@ -619,6 +619,16 @@ export const AppLayout = ({ children }: LayoutProps) => {
                             Secret Scanning
                           </MenuItem>
                         </a>
+                        </Link>
+                        <Link href={`/org/${currentOrg?.id}/secret-sharing`} passHref>
+                        <a>
+                          <MenuItem
+                            isSelected={router.asPath === `/org/${currentOrg?.id}/secret-sharing`}
+                            icon="system-outline-189-domain-verification"
+                          >
+                            Secret Sharing
+                          </MenuItem>
+                        </a>
                       </Link>
                       {(window.location.origin.includes("https://app.infisical.com") ||
                         window.location.origin.includes("https://gamma.infisical.com")) && (

@@ -54,6 +54,7 @@ export * from "./secret-version-tag-junction";
 export * from "./secret-versions";
 export * from "./secrets";
 export * from "./service-tokens";
+export * from "./shared-secrets";
 export * from "./super-admin";
 export * from "./trusted-ips";
 export * from "./user-actions";
