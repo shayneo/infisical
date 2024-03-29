@@ -1,9 +1,10 @@
 import { Table, TableContainer, TBody, Td, Th, THead, Tr } from "@app/components/v2";
-import { useGetSharedSecrets } from "@app/hooks/api/sharedSecrets";
+import { SharedSecret } from "@app/hooks/api/sharedSecrets/types";
 
-export const SecretLinksTable = () => {
-  const { data } = useGetSharedSecrets();
-
+type Props = {
+  sharedSecrets: SharedSecret[];
+};
+export const SecretLinksTable = ({ sharedSecrets }: Props) => {
   return (
     <TableContainer className="mt-8">
       <Table>
@@ -16,16 +17,15 @@ export const SecretLinksTable = () => {
           </Tr>
         </THead>
         <TBody>
-          {data &&
-            data?.map((secret) => {
-              return (
-                <Tr key={secret.id} className="h-10">
-                  <Td>{secret.id}</Td>
-                  <Td>{secret.createdAt}</Td>
-                  <Td>{secret.expiresAt}</Td>
-                </Tr>
-              );
-            })}
+          {sharedSecrets.map((secret) => {
+            return (
+              <Tr key={secret.id} className="h-10">
+                <Td>{secret.id}</Td>
+                <Td>{secret.createdAt}</Td>
+                <Td>{secret.expiresAt}</Td>
+              </Tr>
+            );
+          })}
         </TBody>
       </Table>
     </TableContainer>

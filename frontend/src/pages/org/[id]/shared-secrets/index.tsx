@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
+import { faCopy } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { Button, Select, SelectItem } from "@app/components/v2";
 import { apiRequest } from "@app/config/request";
 import { OrgPermissionActions, OrgPermissionSubjects } from "@app/context";
 import { withPermission } from "@app/hoc";
+import { useGetSharedSecrets } from "@app/hooks/api/sharedSecrets";
 import { SharedSecret } from "@app/hooks/api/sharedSecrets/types";
 import { arrayBufferToBase64, bytesToBase64 } from "@app/lib/crypto";
 import { SecretLinksTable } from "@app/views/SecretSharing/components";
@@ -22,10 +25,11 @@ const SecretSharing = withPermission(
     const [decrypted, setDecrypted] = useState("");
     const [shareLink, setShareLink] = useState("");
     const [expiresDuration, setExpiresDuration] = useState("5");
+    const [sharedSecrets, setSharedSecrets] = useState<SharedSecret[]>([]);
 
     const durationOptions = ["5", "15", "30", "60"];
 
-    async function generateKey() {
+    const generateKey = async () => {
       const k = await crypto.subtle.generateKey(
         {
           name: "AES-GCM",
@@ -37,12 +41,19 @@ const SecretSharing = withPermission(
       setKey(k);
       const jwk = await crypto.subtle.exportKey("jwk", k);
       setKeyString(JSON.stringify(jwk));
-    }
+    };
+    const resp = useGetSharedSecrets();
 
     // generate the inital key
     useEffect(() => {
       generateKey();
     }, []);
+
+    useEffect(() => {
+      if (resp.data) {
+        setSharedSecrets(resp.data);
+      }
+    }, [resp]);
 
     useEffect(() => {
       const encrypt = async () => {
@@ -97,15 +108,26 @@ const SecretSharing = withPermission(
           "/api/v1/shared-secrets",
           reqBody
         );
-        const link = `/shared-secrets/${data.sharedSecret.id}#${bytesToBase64(iv)}`;
+        const link = `${window.location.host}/shared-secrets/${
+          data.sharedSecret.id
+        }#${bytesToBase64(iv)}`;
         setShareLink(link);
 
-        // now reset the key and iv
+        // add to the list
+        sharedSecrets.push(data.sharedSecret);
+        setSharedSecrets(sharedSecrets);
+
+        // reset everything
         setIv(crypto.getRandomValues(new Uint8Array(12)));
         generateKey();
+        setSecretInput("");
       } catch (error) {
         console.error(error);
       }
+    };
+
+    const copyToClipboard = () => {
+      navigator.clipboard.writeText(shareLink);
     };
 
     return (
@@ -173,9 +195,27 @@ const SecretSharing = withPermission(
 
               {shareLink && (
                 <div className="mt-4 w-full border-t border-mineshaft-400 pt-4">
-                  <Link href={shareLink} passHref>
-                    {window.location.host + shareLink}
-                  </Link>
+                  <div className="flex items-center gap-x-4">
+                    <Link href={shareLink}>
+                      <a className="text-sm text-bunker-100">{shareLink}</a>
+                    </Link>
+                    <Button
+                      variant="solid"
+                      colorSchema="primary"
+                      rightIcon={<FontAwesomeIcon icon={faCopy} className="ml-1 mr-2" />}
+                      className="h-min"
+                      onClick={copyToClipboard}
+                    >
+                      Copy
+                    </Button>
+                  </div>
+                  <p className="pt-4 text-bunker-200">
+                    Your secret can be shared using the link above. The link contains a special{" "}
+                    <a href="https://en.wikipedia.org/wiki/URI_fragment">URI Fragment</a> that is
+                    never seen by Infisical servers. Make sure you only share the link with people
+                    who can know your secret. Once you navigate away from this page, we won&#39;t be
+                    able to regenerate the link, so make sure you hold on to it!
+                  </p>
                 </div>
               )}
 
@@ -188,7 +228,7 @@ const SecretSharing = withPermission(
                 </div>
               )}
             </div>
-            <SecretLinksTable />
+            <SecretLinksTable sharedSecrets={sharedSecrets} />
           </div>
         </div>
       </div>
