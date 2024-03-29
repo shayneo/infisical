@@ -128,6 +128,7 @@ const SecretSharing = withPermission(
 
     const copyToClipboard = () => {
       navigator.clipboard.writeText(shareLink);
+      setShareLink("");
     };
 
     return (
