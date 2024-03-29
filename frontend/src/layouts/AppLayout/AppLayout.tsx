@@ -115,7 +115,7 @@ type TAddProjectFormData = yup.InferType<typeof formSchema>;
 
 export const AppLayout = ({ children }: LayoutProps) => {
   const router = useRouter();
-  
+
   const { mutateAsync } = useGetOrgTrialUrl();
 
   const { workspaces, currentWorkspace } = useWorkspace();
@@ -619,11 +619,11 @@ export const AppLayout = ({ children }: LayoutProps) => {
                             Secret Scanning
                           </MenuItem>
                         </a>
-                        </Link>
-                        <Link href={`/org/${currentOrg?.id}/secret-sharing`} passHref>
+                      </Link>
+                      <Link href={`/org/${currentOrg?.id}/shared-secrets`} passHref>
                         <a>
                           <MenuItem
-                            isSelected={router.asPath === `/org/${currentOrg?.id}/secret-sharing`}
+                            isSelected={router.asPath === `/org/${currentOrg?.id}/shared-secrets`}
                             icon="system-outline-189-domain-verification"
                           >
                             Secret Sharing

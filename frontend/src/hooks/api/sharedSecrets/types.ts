@@ -3,7 +3,13 @@ export type SharedSecret = {
   createdAt: string
   updatedAt: string
   expiresAt: string
-  encrypedSecret: string
+  encryptedSecret: string
   userId: string
-  jwt: Record<string, string>
+  jwk: {
+    alg: string;
+    ext: boolean;
+    k: string;
+    key_ops: string[];
+    kty: string;
+  };
 }

@@ -24,13 +24,38 @@ export const registerSharedSecretRouter = async (server: FastifyZodProvider) => 
       return { sharedSecrets };
     }
   });
+
+  server.route({
+    url: "/:sharedSecretId",
+    method: "GET",
+    schema: {
+      params: z.object({ sharedSecretId: z.string().trim() }),
+      response: {
+        200: z.object({
+          sharedSecret: SharedSecretsSchema
+        })
+      }
+    },
+    handler: async (req) => {
+      const { sharedSecretId } = req.params;
+      const sharedSecret = await server.services.sharedSecret.getById(sharedSecretId);
+      return { sharedSecret };
+    }
+  });
+
   server.route({
     url: "/",
     method: "POST",
     schema: {
       body: z.object({
         sharedSecret: z.object({
-          jwk: z.object({}),
+          jwk: z.object({
+            alg: z.string(),
+            ext: z.boolean(),
+            k: z.string(),
+            key_ops: z.array(z.string()),
+            kty: z.string()
+          }),
           encryptedSecret: z.string(),
           expiresAt: z.string()
         })
