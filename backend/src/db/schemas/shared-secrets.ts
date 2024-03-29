@@ -9,7 +9,7 @@ import { TImmutableDBKeys } from "./models";
 
 export const SharedSecretsSchema = z.object({
   id: z.string().uuid(),
-  jwt: z.unknown(),
+  jwk: z.unknown(),
   encryptedSecret: z.string().nullable().optional(),
   expiresAt: z.date(),
   userId: z.string().uuid(),

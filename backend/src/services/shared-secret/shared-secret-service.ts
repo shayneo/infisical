@@ -22,7 +22,7 @@ export const sharedSecretServiceFactory = ({ sharedSecretDAL }: TSharedSecretSer
   }) => {
     const newRecord = await sharedSecretDAL.create({
       userId,
-      jwt: jwk,
+      jwk,
       encryptedSecret,
       expiresAt
     });
@@ -38,7 +38,6 @@ export const sharedSecretServiceFactory = ({ sharedSecretDAL }: TSharedSecretSer
   };
 
   const getSharedSecretsByUserId = async (userId: string) => {
-    console.log({ userId });
     const secrets = await sharedSecretDAL.getSharedSecretsByUserId(userId);
     return secrets;
   };
